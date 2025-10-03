@@ -1,0 +1,42 @@
+
+
+import requests
+from bs4 import BeautifulSoup
+
+def fetch_headlines(url, limit=10, output_file="headlines.txt"):
+    try:
+        # Fetch website content
+        response = requests.get(url)
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        print("Error fetching the website:", e)
+        return
+
+   
+    soup = BeautifulSoup(response.text, "html.parser")
+
+   
+    headlines = [h.get_text(strip=True) for h in soup.find_all("h3")]
+
+   
+    headlines = headlines[:limit]
+
+   
+    with open(output_file, "w", encoding="utf-8") as f:
+        for idx, headline in enumerate(headlines, 1):
+            f.write(f"{idx}. {headline}\n")
+
+    print(f"✅ {len(headlines)} headlines saved to {output_file}")
+
+
+if __name__ == "__main__":
+    url = "https://www.bbc.com/news" 
+  fetch_headline(url)
+  
+  
+  
+  
+  
+  
+  
+  
